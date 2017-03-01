@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+  </head>
+<body>
+
+  <h3>污染城市列表</h3>
+  <ul id="aqi-list">
+<!--
+    <li>第一名：福州（样例），10</li>
+      <li>第二名：福州（样例），10</li> -->
+  </ul>
+
+<script type="text/javascript">
+
+var aqiData = [
+  ["北京", 90],
+  ["上海", 50],
+  ["福州", 10],
+  ["广州", 50],
+  ["成都", 90],
+  ["西安", 100],
+  ["太原", 70]
+];
+
+(function () {
+
+  /*
+  在注释下方编写代码
+  遍历读取aqiData中各个城市的数据
+  将空气质量指数大于60的城市显示到aqi-list的列表中
+  */
+  //创建一个新数组，用于存放符合条件的数据
+  var res = new Array();
+  function city(name,data){
+    this.name=name;
+    this.data=data;
+  }
+  //遍历数据，将符合条件的数据以对象的形式存入新的数组
+  for (var i = 0; i < aqiData.length; i++) {
+    if (aqiData[i][1] > 60) {
+      res.push(new city(aqiData[i][0],aqiData[i][1]));
+    }
+  }
+  //将新数组排序
+  res.sort(function(a,b){
+    return b.data-a.data;
+  })
+  //遍历并输出结果
+  for (var i = 0; i < res.length; i++) {
+    var li    = document.createElement('li');//创建一个li元素
+    var num   = i+1;
+    var node  = document.createTextNode("第"+num+"名："+res[i].name+"，"+res[i].data);//创建一个文本元素
+    li.appendChild(node);//将文本元素加入li元素中
+    document.getElementById('aqi-list').appendChild(li);//将li元素加入ul元素中
+  }
+})();
+
+</script>
+</body>
+</html>
