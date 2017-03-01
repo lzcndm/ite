@@ -30,6 +30,9 @@
       div.appendChild(content);
       div.className="num";
       div.style="padding:20px;margin:10px;background:red;display:inline-block;color:#fff";
+      div.onclick=function(){
+        box.removeChild(this);
+      }
       return div;
     }
     //左侧进
