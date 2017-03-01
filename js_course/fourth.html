@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>fourth</title>
+  </head>
+  <body>
+    <input type="text" id="input-box" value="">
+    <button type="button" id="left-in">左侧入</button>
+    <button type="button" id="right-in">右侧入</button>
+    <button type="button" id="left-out" style="margin-left:20px;">左侧出</button>
+    <button type="button" id="right-out">右侧出</button>
+    <div id="box">
+
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  window.onload=function(){
+    var input_box = document.getElementById('input-box');
+    var left_in = document.getElementById('left-in');
+    var right_in = document.getElementById('right-in');
+    var left_out = document.getElementById('left-out');
+    var right_out = document.getElementById('right-out');
+    var box = document.getElementById('box');
+    //创建一个元素，并返回这个元素
+    function createE(){
+      var div = document.createElement('div');
+      var content = document.createTextNode(input_box.value);
+      div.appendChild(content);
+      div.className="num";
+      div.style="padding:20px;margin:10px;background:red;display:inline-block;color:#fff";
+      return div;
+    }
+    //左侧进
+    left_in.onclick=function(){
+      var div = createE();
+      box.insertBefore(div,box.firstChild);
+    }
+    //右侧进
+    right_in.onclick=function(){
+      var div = createE();
+      box.appendChild(div);
+    }
+    /*
+    *删除元素方法
+    *传入将要进行的操作
+    */
+    function deleteE(action){
+      var child_div = box.getElementsByTagName('div');
+      //由action确定将要删除元素的索引
+      if (action == 'left') {
+        index = 0;
+      }else if (action == 'right') {
+        index = child_div.length - 1;
+      }
+      //判断是否有内容可以删除
+      if (child_div.length == 0) {
+        alert('已经没有东西可以删除了！');
+        return false;
+      }else {
+        var delete_num = child_div[index].innerHTML;
+        box.removeChild(child_div[index]);
+        alert('将要删除的内容为：'+delete_num);
+      }
+    }
+    //左侧出
+    left_out.onclick=function(){
+      deleteE('left');
+    }
+    //右侧出
+    right_out.onclick=function(){
+      deleteE('right');
+    }
+  }
+</script>
