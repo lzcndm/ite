@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>fifth</title>
+  </head>
+  <style media="screen">
+    #box{
+      margin-top: 20px;
+    }
+  </style>
+  <body>
+    <input type="text" id="input-box" value="">
+    <button type="button" id="left-in">左侧入</button>
+    <button type="button" id="right-in">右侧入</button>
+    <button type="button" id="left-out" style="margin-left:20px;">左侧出</button>
+    <button type="button" id="right-out">右侧出</button>
+    <button type="button" id="mp-sort">冒泡排序</button>
+    <div id="box">
+
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  window.onload=function(){
+
+    var input_box = document.getElementById('input-box');
+    var left_in = document.getElementById('left-in');
+    var right_in = document.getElementById('right-in');
+    var left_out = document.getElementById('left-out');
+    var right_out = document.getElementById('right-out');
+    var box = document.getElementById('box');
+    var mp_sort = document.getElementById('mp-sort');
+
+    //验证输入值是否符合要求
+    function check_num(){
+      var num = document.getElementById('input-box').value;
+      if (isNaN(num) || ( num < 10 || num > 100)) {
+        alert('请输入10-100的数字');
+        return false;
+      }else {
+        return true;
+      }
+    }
+
+    //判断队列元素是否超过60个
+    function check_length(){
+      var length = box.getElementsByTagName('div').length;
+      if (length >= 60) {
+        alert('队列元素不能超过60个！');
+        return false;
+      }else {
+        return true;
+      }
+    }
+
+    //清空input框
+    function clear(){
+      input_box.value = null;
+    }
+    /*
+    *删除元素方法
+    *传入将要进行的操作
+    */
+    function deleteE(action){
+      var child_div = box.getElementsByTagName('div');
+      //由action确定将要删除元素的索引
+      if (action == 'left') {
+        index = 0;
+      }else if (action == 'right') {
+        index = child_div.length - 1;
+      }
+      //判断是否有内容可以删除
+      if (child_div.length == 0) {
+        alert('已经没有东西可以删除了！');
+        return false;
+      }else {
+        var delete_num = child_div[index].style.height;
+        box.removeChild(child_div[index]);
+        alert('将要删除元素的高度为：'+delete_num);
+      }
+    }
+    //创建一个元素，并返回这个元素
+    function createE(){
+      var div = document.createElement('div');
+      var h = input_box.value;
+      div.className="num";
+      div.style="width:15px;height:"+(h*3)+"px;margin-right:3px;background:red;display:inline-block;color:#fff";
+      div.onclick=function() {
+        box.removeChild(this);
+      }
+      return div;
+    }
+
+    //左侧进
+    left_in.onclick=function(){
+      if (!check_num()) {
+        return false;
+      }
+      if (!check_length()) {
+        return false;
+      }
+      var div = createE();
+      box.insertBefore(div,box.firstChild);
+      clear();
+    }
+
+    //右侧进
+    right_in.onclick=function(){
+      if(!check_num()){
+        return false;
+      }
+      if (!check_length()) {
+        return false;
+      }
+      var div = createE();
+      box.appendChild(div);
+      clear();
+    }
+    //左侧出
+    left_out.onclick=function(){
+      deleteE('left');
+    }
+    //右侧出
+    right_out.onclick=function(){
+      deleteE('right');
+    }
+    //递归实现冒泡排序
+    function digui(length){
+      var data = box.getElementsByTagName('div');
+      if (length > 0) {
+        //设置一秒延迟，以实现动态效果
+        setTimeout(function(){
+          for (var i = 0; i < length; i++) {
+            if (data[i].offsetHeight > data[i+1].offsetHeight) {
+              var temp = data[i].offsetHeight;
+              data[i].style.height = data[i+1].offsetHeight+'px';
+              data[(i+1)].style.height = temp+'px';
+            }
+          }
+        },1000);
+        setTimeout(function(){
+          digui(length-1);
+        },1000);
+      }else {
+        return false;
+      }
+    }
+    //冒泡排序触发事件
+    mp_sort.onclick=function(){
+      var data = box.getElementsByTagName('div');
+      digui(data.length-1);
+    }
+  }
+</script>
