@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>sixth</title>
+  </head>
+  <style media="screen">
+    .mark{
+      color: #000;
+    }
+  </style>
+  <body>
+    <textarea name="name" id="textarea" rows="8" cols="80"></textarea>
+    <button type="button" id="left-in">左侧入</button>
+    <button type="button" id="right-in">右侧入</button>
+    <button type="button" id="left-out" style="margin-left:20px;">左侧出</button>
+    <button type="button" id="right-out">右侧出</button><br>
+    <input type="text" id="search" name="" value="">
+    <button type="button" id="searchBtn">搜索</button>
+    <div id="box">
+
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  window.onload=function(){
+    var textarea = document.getElementById('textarea');
+    var left_in = document.getElementById('left-in');
+    var right_in = document.getElementById('right-in');
+    var left_out = document.getElementById('left-out');
+    var right_out = document.getElementById('right-out');
+    var box = document.getElementById('box');
+    var searchBtn = document.getElementById('searchBtn');
+    //清空input框
+    function clear(){
+      textarea.value = null;
+    }
+    /*
+    *用回车，逗号（全角半角均可），顿号，空格（全角半角、Tab等均可）等符号作为不同内容的间隔
+    *返回处理完成的数组
+    */
+    function getData(){
+      var data = textarea.value.trim().split(/[,，、 \n]/);
+      return data;
+    }
+    //创建一个元素，并返回这个元素
+    function createE(content){
+      var div = document.createElement('div');
+      var text = document.createTextNode(content);
+      div.appendChild(text);
+      div.className="num";
+      div.style="padding:20px;margin:10px;background:green;display:inline-block;color:#fff";
+      div.onclick=function() {
+        box.removeChild(this);
+      }
+      return div;
+    }
+    //左侧进
+    left_in.onclick=function(){
+      var data = getData();
+      for (var i = 0; i < data.length; i++) {
+        var div = createE(data[i]);
+        box.insertBefore(div,box.firstChild);
+      }
+      clear();
+    }
+    //右侧进
+    right_in.onclick=function(){
+      var data = getData();
+      for (var i = 0; i < data.length; i++) {
+        var div = createE(data[i]);
+        box.appendChild(div);
+      }
+      clear();
+    }
+    /*
+    *删除元素方法
+    *传入将要进行的操作
+    */
+    function deleteE(action){
+      var child_div = box.getElementsByTagName('div');
+      //由action确定将要删除元素的索引
+      if (action == 'left') {
+        index = 0;
+      }else if (action == 'right') {
+        index = child_div.length - 1;
+      }
+      //判断是否有内容可以删除
+      if (child_div.length == 0) {
+        alert('已经没有东西可以删除了！');
+        return false;
+      }else {
+        var delete_num = child_div[index].innerHTML;
+        box.removeChild(child_div[index]);
+        alert('将要删除的内容为：'+delete_num);
+      }
+    }
+    //左侧出
+    left_out.onclick=function(){
+      deleteE('left');
+    }
+    //右侧出
+    right_out.onclick=function(){
+      deleteE('right');
+    }
+    //给搜索按钮绑定点击事件
+    searchBtn.onclick=function(){
+      var str = document.getElementById('search').value.trim();
+      /*
+      *全局匹配输入的值
+      *str 要传入的字符串
+      *'g' 进行全局匹配
+      */
+      var strReg = new RegExp(str,'g');
+      var divBox = box.getElementsByClassName('num');
+      var reStr = "<span class='mark'>"+str+"</span>";
+      for (var i = 0; i < divBox.length; i++) {
+         divBox[i].innerHTML = divBox[i].innerHTML.replace(strReg,reStr);
+      }
+    }
+  }
+</script>
